@@ -14,6 +14,7 @@ fn main() {
     // Arguments
     let mut show_ends = false;
     let mut number = false;
+    let mut number_nonblank = false;
 
     for arg in &args[1..] {
         // Handle short and combined arguments
@@ -26,6 +27,11 @@ fn main() {
                 if short_arg == 'n' {
                     number = true;
                 }
+
+                if short_arg == 'b' {
+                    number = false;
+                    number_nonblank = true;
+                }
             }
         }
 
@@ -36,6 +42,11 @@ fn main() {
 
         if arg == "--number" {
             number = true;
+        }
+
+        if arg == "--number-nonblank" {
+            number = false;
+            number_nonblank = true;
         }
     }
 
@@ -48,13 +59,26 @@ fn main() {
             for line in buf_reader.lines() {
                 match line {
                     Ok(mut line) => {
-                        if show_ends == true {
-                            line = line + "$";
+                        line_number += 1;
+                        if number_nonblank && line.len() == 0 {
+                            line_number -= 1;
                         }
 
-                        if number == true {
-                            line_number += 1;
+                        if number == true || number_nonblank == true {
                             line = line_number.to_string() + "\t" + &line;
+                        }
+
+                        if number_nonblank == true {
+                            let line_no_ws: String =
+                                line.chars().filter(|c| !c.is_whitespace()).collect();
+
+                            if number_nonblank && line_no_ws.len() == 1 {
+                                line = "\t".to_string();
+                            }
+                        }
+
+                        if show_ends == true {
+                            line = line + "$";
                         }
 
                         println!("{line}")
