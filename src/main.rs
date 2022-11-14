@@ -14,7 +14,7 @@ fn main() {
     let mut show_ends = false;
 
     for arg in &args[1.. ] {
-        if arg == "-E" {
+        if arg == "-E" || arg == "--show-ends" {
             show_ends = true;
         }
     }
