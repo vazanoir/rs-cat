@@ -64,24 +64,20 @@ fn main() {
                             line_number -= 1;
                         }
 
-                        if number == true || number_nonblank == true {
+                        if number || number_nonblank {
+                            if number_nonblank && line.len() == 0 {
+                                println!("\t");
+                                continue;
+                            }
+
                             line = line_number.to_string() + "\t" + &line;
                         }
 
-                        if number_nonblank == true {
-                            let line_no_ws: String =
-                                line.chars().filter(|c| !c.is_whitespace()).collect();
-
-                            if number_nonblank && line_no_ws.len() == 1 {
-                                line = "\t".to_string();
-                            }
-                        }
-
-                        if show_ends == true {
+                        if show_ends {
                             line = line + "$";
                         }
 
-                        println!("{line}")
+                        println!("{line}");
                     }
                     Err(e) => println!("{e}"),
                 }
