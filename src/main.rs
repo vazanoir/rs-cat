@@ -3,9 +3,10 @@ use std::fs;
 use std::io;
 use std::io::prelude::BufRead;
 
+const LINENUMBER_MAX_SIZE: usize = 6;
+
 fn format_linenumber(number: i32) -> String {
-    let number_size = number.to_string().len();
-    let char_to_fill = 6 - number_size;
+    let char_to_fill = LINENUMBER_MAX_SIZE - number.to_string().len();
     let mut formated_linenumber = number.to_string();
 
     for _ in 0..char_to_fill {
