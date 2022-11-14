@@ -13,29 +13,29 @@ fn main() {
 
     let mut show_ends = false;
 
-    for arg in &args[1.. ] {
+    for arg in &args[1..] {
         if arg == "-E" || arg == "--show-ends" {
             show_ends = true;
         }
     }
 
-    for arg in &args[1.. ] {
+    for arg in &args[1..] {
         if arg.chars().nth(0).unwrap() != '-' {
-                let file = fs::File::open(arg).expect("Please enter a valid file");
-                let buf_reader = io::BufReader::new(file);
+            let file = fs::File::open(arg).expect("Please enter a valid file");
+            let buf_reader = io::BufReader::new(file);
 
-                for line in buf_reader.lines() {
-                    match line {
-                        Ok(mut line) => {
-                            if show_ends == true {
-                                line = line + "$";
-                            }
+            for line in buf_reader.lines() {
+                match line {
+                    Ok(mut line) => {
+                        if show_ends == true {
+                            line = line + "$";
+                        }
 
-                            println!("{line}")
-                        },
-                        Err(e) => println!("{e}"),
+                        println!("{line}")
                     }
+                    Err(e) => println!("{e}"),
                 }
+            }
         }
     }
 }
