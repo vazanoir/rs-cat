@@ -15,6 +15,7 @@ fn main() {
     let mut show_ends = false;
     let mut number = false;
     let mut number_nonblank = false;
+    let mut show_tabs = false;
 
     for arg in &args[1..] {
         // Handle short and combined arguments
@@ -35,6 +36,10 @@ fn main() {
                     number = false;
                     number_nonblank = true;
                 }
+
+                if short_arg == 'T' {
+                    show_tabs = true;
+                }
             }
         }
 
@@ -51,6 +56,10 @@ fn main() {
             number = false;
             number_nonblank = true;
         }
+
+        if arg == "--show-tabs" {
+            show_tabs = true;
+        }
     }
 
     for arg in &args[1..] {
@@ -65,6 +74,10 @@ fn main() {
                         line_number += 1;
                         if number_nonblank && line.len() == 0 {
                             line_number -= 1;
+                        }
+
+                        if show_tabs {
+                            line = line.replace("\t", "^I");
                         }
 
                         if number || number_nonblank {
