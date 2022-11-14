@@ -33,7 +33,6 @@ fn main() {
                 }
 
                 if short_arg == 'b' {
-                    number = false;
                     number_nonblank = true;
                 }
 
@@ -53,7 +52,6 @@ fn main() {
         }
 
         if arg == "--number-nonblank" {
-            number = false;
             number_nonblank = true;
         }
 
