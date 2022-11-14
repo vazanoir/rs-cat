@@ -18,7 +18,10 @@ fn main() {
 
     for arg in &args[1..] {
         // Handle short and combined arguments
-        if arg.chars().nth(1).unwrap() != '-' {
+        let first_char = arg.chars().nth(0).unwrap();
+        let second_char = arg.chars().nth(1).unwrap();
+
+        if first_char == '-' && second_char != '-' {
             for short_arg in arg.chars() {
                 if short_arg == 'E' {
                     show_ends = true;
