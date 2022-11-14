@@ -3,6 +3,18 @@ use std::fs;
 use std::io;
 use std::io::prelude::*;
 
+fn format_linenumber(number: i32) -> String {
+    let number_size = number.to_string().len();
+    let char_to_fill = 6 - number_size;
+    let mut formated_linenumber = number.to_string();
+
+    for _ in 0..char_to_fill {
+        formated_linenumber = " ".to_string() + &formated_linenumber;
+    }
+
+    return formated_linenumber;
+}
+
 fn main() {
     let args: Vec<String> = env::args().collect();
 
@@ -82,7 +94,7 @@ fn main() {
                             if number_nonblank && line.len() == 0 {
                                 line = "".to_string();
                             } else {
-                                line = line_number.to_string() + "\t" + &line;
+                                line = format_linenumber(line_number) + "\t" + &line;
                             }
                         }
 
