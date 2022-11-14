@@ -1,7 +1,7 @@
 use std::env;
 use std::fs;
 use std::io;
-use std::io::prelude::*;
+use std::io::prelude::BufRead;
 
 fn format_linenumber(number: i32) -> String {
     let number_size = number.to_string().len();
