@@ -82,11 +82,10 @@ fn main() {
 
                         if number || number_nonblank {
                             if number_nonblank && line.len() == 0 {
-                                println!("\t");
-                                continue;
+                                line = "".to_string();
+                            } else {
+                                line = line_number.to_string() + "\t" + &line;
                             }
-
-                            line = line_number.to_string() + "\t" + &line;
                         }
 
                         if show_ends {
