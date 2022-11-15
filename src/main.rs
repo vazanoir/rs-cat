@@ -107,7 +107,8 @@ fn main() {
                         let empty_line = line.len() == 0;
 
                         let b_decrement = number_nonblank && empty_line;
-                        let s_decrement = !number_nonblank && squeeze_blank && blank_line_counter > 1;
+                        let s_decrement =
+                            !number_nonblank && squeeze_blank && blank_line_counter > 1;
 
                         line_number += 1;
                         if b_decrement || s_decrement {
