@@ -62,7 +62,10 @@ fn main() {
                     'b' => number_nonblank = true,
                     'T' => show_tabs = true,
                     's' => squeeze_blank = true,
-                    'A' => { show_ends = true; show_tabs = true },
+                    'A' => {
+                        show_ends = true;
+                        show_tabs = true
+                    }
                     _short_arg => (),
                 }
             }
@@ -76,7 +79,10 @@ fn main() {
             "--number-nonblank" => number_nonblank = true,
             "--show-tabs" => show_tabs = true,
             "--squeeze-blank" => squeeze_blank = true,
-            "--show-all" => { show_ends = true; show_tabs = true },
+            "--show-all" => {
+                show_ends = true;
+                show_tabs = true
+            }
             _arg => (),
         }
     }
@@ -99,9 +105,11 @@ fn main() {
                 match line {
                     Ok(mut line) => {
                         let empty_line = line.len() == 0;
+                        let decrement_line_number = (number_nonblank && empty_line)
+                            || (squeeze_blank && blank_line_counter > 1);
 
                         line_number += 1;
-                        if number_nonblank && empty_line {
+                        if decrement_line_number {
                             line_number -= 1;
                         }
 
