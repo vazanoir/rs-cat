@@ -29,6 +29,7 @@ fn main() {
     let mut number = false;
     let mut number_nonblank = false;
     let mut show_tabs = false;
+    let mut squeeze_blank = false;
 
     for arg in &args[1..] {
         // Handle short and combined arguments
@@ -52,6 +53,10 @@ fn main() {
                 if short_arg == 'T' {
                     show_tabs = true;
                 }
+
+                if short_arg == 's' {
+                    squeeze_blank = true;
+                }
             }
         }
 
@@ -71,10 +76,15 @@ fn main() {
         if arg == "--show-tabs" {
             show_tabs = true;
         }
+
+        if arg == "--squeeze_blank" {
+            squeeze_blank = true;
+        }
     }
 
     let mut output = String::from("");
     let mut line_number: i32 = 0;
+    let mut blank_line_counter: i32 = 0;
 
     for arg in &args[1..] {
         if arg.chars().nth(0).unwrap() != '-' {
@@ -87,6 +97,12 @@ fn main() {
                         line_number += 1;
                         if number_nonblank && line.len() == 0 {
                             line_number -= 1;
+                        }
+
+                        if line.len() == 0 {
+                            blank_line_counter += 1;
+                        } else {
+                            blank_line_counter = 0;
                         }
 
                         if show_tabs {
@@ -105,7 +121,9 @@ fn main() {
                             line = line + "$";
                         }
 
-                        output += &(line + "\n");
+                        if !squeeze_blank || (squeeze_blank && blank_line_counter <= 1) {
+                            output += &(line + "\n");
+                        }
                     }
                     Err(e) => println!("{e}"),
                 }
