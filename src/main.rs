@@ -3,17 +3,17 @@ use std::fs;
 use std::io;
 use std::io::prelude::BufRead;
 
-const LINENUMBER_MAX_SIZE: usize = 6;
+const LINE_NUMBER_MAX_SIZE: usize = 6;
 
 fn fmt_line_number(number: i32) -> String {
-    let char_to_fill = LINENUMBER_MAX_SIZE - number.to_string().len();
-    let mut formated_linenumber = number.to_string();
+    let char_to_fill = LINE_NUMBER_MAX_SIZE - number.to_string().len();
+    let mut formated_line_number = number.to_string();
 
     for _ in 0..char_to_fill {
-        formated_linenumber = " ".to_string() + &formated_linenumber;
+        formated_line_number = " ".to_string() + &formated_line_number;
     }
 
-    return formated_linenumber;
+    return formated_line_number;
 }
 
 fn main() {
