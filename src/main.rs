@@ -145,5 +145,6 @@ fn main() {
         }
     }
 
+    let output = output.strip_suffix("\n").unwrap();
     println!("{output}");
 }
