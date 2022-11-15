@@ -5,7 +5,7 @@ use std::io::prelude::BufRead;
 
 const LINENUMBER_MAX_SIZE: usize = 6;
 
-fn format_linenumber(number: i32) -> String {
+fn fmt_line_number(number: i32) -> String {
     let char_to_fill = LINENUMBER_MAX_SIZE - number.to_string().len();
     let mut formated_linenumber = number.to_string();
 
@@ -94,12 +94,14 @@ With no FILE, or when FILE is -, read standard input.
             for line in buf_reader.lines() {
                 match line {
                     Ok(mut line) => {
+                        let empty_line = line.len() == 0;
+
                         line_number += 1;
-                        if number_nonblank && line.len() == 0 {
+                        if number_nonblank && empty_line {
                             line_number -= 1;
                         }
 
-                        if line.len() == 0 {
+                        if empty_line {
                             blank_line_counter += 1;
                         } else {
                             blank_line_counter = 0;
@@ -110,10 +112,10 @@ With no FILE, or when FILE is -, read standard input.
                         }
 
                         if number || number_nonblank {
-                            if number_nonblank && line.len() == 0 {
+                            if number_nonblank && empty_line {
                                 line = "".to_string();
                             } else {
-                                line = format_linenumber(line_number) + "\t" + &line;
+                                line = fmt_line_number(line_number) + "\t" + &line;
                             }
                         }
 
