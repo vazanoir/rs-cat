@@ -16,11 +16,27 @@ fn fmt_line_number(number: i32) -> String {
     return formated_line_number;
 }
 
+fn print_help() {
+    println!(
+        "Usage: cat [OPTION]... [FILE]...
+Concatenate FILE(s) to standard output.
+
+With no FILE, or when FILE is -, read standard input.
+  -A, --show-all           equivalent to -ET
+  -b, --number-nonblank    number nonempty output lines, overrides -n
+  -E, --show-ends          display $ at end of each line
+  -n, --number             number all output lines
+  -s, --squeeze-blank      suppress repeated empty output lines
+  -T, --show-tabs          display TAB characters as ^I
+  -h, --help        display this help and exit"
+    );
+}
+
 fn main() {
     let args: Vec<String> = env::args().collect();
 
     if args.len() < 2 {
-        println!("Please enter a path");
+        print_help();
         return;
     }
 
@@ -66,19 +82,7 @@ fn main() {
     }
 
     if help {
-        println!(
-            "Usage: cat [OPTION]... [FILE]...
-Concatenate FILE(s) to standard output.
-
-With no FILE, or when FILE is -, read standard input.
-  -A, --show-all           equivalent to -ET
-  -b, --number-nonblank    number nonempty output lines, overrides -n
-  -E, --show-ends          display $ at end of each line
-  -n, --number             number all output lines
-  -s, --squeeze-blank      suppress repeated empty output lines
-  -T, --show-tabs          display TAB characters as ^I
-  -h, --help        display this help and exit"
-        );
+        print_help();
         return;
     }
 
