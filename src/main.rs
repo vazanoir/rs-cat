@@ -23,11 +23,11 @@ Concatenate FILE(s) to standard output.
 
 With no FILE, or when FILE is -, read standard input.
   -A, --show-all            equivalent to -ET
-  -b, --number-nonblank     number nonempty output lines, overrides -n
   -E, --show-ends           display $ at end of each line
-  -n, --number              number all output lines
-  -s, --squeeze-blank       suppress repeated empty output lines
   -T, --show-tabs           display TAB characters as ^I
+  -n, --number              number all output lines
+  -b, --number-nonblank     number nonempty output lines, overrides -n
+  -s, --squeeze-blank       suppress repeated empty output lines
   -h, --help                display this help and exit"
     );
 }
