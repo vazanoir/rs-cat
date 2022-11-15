@@ -39,45 +39,27 @@ fn main() {
 
         if first_char == '-' && second_char != '-' {
             for short_arg in arg.chars() {
-                if short_arg == 'h' {
-                    help = true;
-                }
-                if short_arg == 'E' {
-                    show_ends = true;
-                }
-                if short_arg == 'n' {
-                    number = true;
-                }
-                if short_arg == 'b' {
-                    number_nonblank = true;
-                }
-                if short_arg == 'T' {
-                    show_tabs = true;
-                }
-                if short_arg == 's' {
-                    squeeze_blank = true;
+                match short_arg {
+                    'h' => help = true,
+                    'E' => show_ends = true,
+                    'n' => number = true,
+                    'b' => number_nonblank = true,
+                    'T' => show_tabs = true,
+                    's' => squeeze_blank = true,
+                    _short_arg => (),
                 }
             }
         }
 
         // Long arguments
-        if arg == "--help" {
-            help = true;
-        }
-        if arg == "--show-ends" {
-            show_ends = true;
-        }
-        if arg == "--number" {
-            number = true;
-        }
-        if arg == "--number-nonblank" {
-            number_nonblank = true;
-        }
-        if arg == "--show-tabs" {
-            show_tabs = true;
-        }
-        if arg == "--squeeze_blank" {
-            squeeze_blank = true;
+        match arg.as_str() {
+            "--help" => help = true,
+            "--show-ends" => show_ends = true,
+            "--number" => number = true,
+            "--number-nonblank" => number_nonblank = true,
+            "--show-tabs" => show_tabs = true,
+            "--squeeze-blank" => squeeze_blank = true,
+            _arg => (),
         }
     }
 
