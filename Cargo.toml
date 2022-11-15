@@ -8,5 +8,7 @@ edition = "2021"
 [profile.release]
 lto = true
 strip = true
+opt-level = "s"
+codegen-units = 1
 
 [dependencies]
