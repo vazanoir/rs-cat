@@ -73,12 +73,14 @@ fn main() {
         }
     }
 
+    let mut output = String::from("");
+    let mut line_number: i32 = 0;
+
     for arg in &args[1..] {
         if arg.chars().nth(0).unwrap() != '-' {
             let file = fs::File::open(arg).expect("Please enter a valid file");
             let buf_reader = io::BufReader::new(file);
 
-            let mut line_number: i32 = 0;
             for line in buf_reader.lines() {
                 match line {
                     Ok(mut line) => {
@@ -103,11 +105,13 @@ fn main() {
                             line = line + "$";
                         }
 
-                        println!("{line}");
+                        output += &(line + "\n");
                     }
                     Err(e) => println!("{e}"),
                 }
             }
         }
     }
+
+    println!("{output}");
 }
