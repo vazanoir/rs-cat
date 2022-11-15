@@ -146,6 +146,10 @@ fn main() {
         }
     }
 
-    let output = output.strip_suffix("\n").unwrap();
+    let output = match output.strip_suffix("\n") {
+        Some(output) => output,
+        None => &output,
+    };
+
     println!("{output}");
 }
