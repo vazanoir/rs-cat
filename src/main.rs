@@ -106,7 +106,7 @@ fn main() {
                     Ok(mut line) => {
                         let empty_line = line.len() == 0;
                         let decrement_line_number = (number_nonblank && empty_line)
-                            || (squeeze_blank && blank_line_counter > 1);
+                            || (!number_nonblank && squeeze_blank && blank_line_counter > 1);
 
                         line_number += 1;
                         if decrement_line_number {
