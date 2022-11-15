@@ -25,6 +25,7 @@ fn main() {
     }
 
     // Arguments
+    let mut help = false;
     let mut show_ends = false;
     let mut number = false;
     let mut number_nonblank = false;
@@ -38,22 +39,21 @@ fn main() {
 
         if first_char == '-' && second_char != '-' {
             for short_arg in arg.chars() {
+                if short_arg == 'h' {
+                    help = true;
+                }
                 if short_arg == 'E' {
                     show_ends = true;
                 }
-
                 if short_arg == 'n' {
                     number = true;
                 }
-
                 if short_arg == 'b' {
                     number_nonblank = true;
                 }
-
                 if short_arg == 'T' {
                     show_tabs = true;
                 }
-
                 if short_arg == 's' {
                     squeeze_blank = true;
                 }
@@ -61,25 +61,41 @@ fn main() {
         }
 
         // Long arguments
+        if arg == "--help" {
+            help = true;
+        }
         if arg == "--show-ends" {
             show_ends = true;
         }
-
         if arg == "--number" {
             number = true;
         }
-
         if arg == "--number-nonblank" {
             number_nonblank = true;
         }
-
         if arg == "--show-tabs" {
             show_tabs = true;
         }
-
         if arg == "--squeeze_blank" {
             squeeze_blank = true;
         }
+    }
+
+    if help {
+        println!(
+            "Usage: cat [OPTION]... [FILE]...
+Concatenate FILE(s) to standard output.
+
+With no FILE, or when FILE is -, read standard input.
+
+  -b, --number-nonblank    number nonempty output lines, overrides -n
+  -E, --show-ends          display $ at end of each line
+  -n, --number             number all output lines
+  -s, --squeeze-blank      suppress repeated empty output lines
+  -T, --show-tabs          display TAB characters as ^I
+  -h, --help        display this help and exit"
+        );
+        return;
     }
 
     let mut output = String::from("");
