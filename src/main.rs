@@ -105,11 +105,12 @@ fn main() {
                 match line {
                     Ok(mut line) => {
                         let empty_line = line.len() == 0;
-                        let decrement_line_number = (number_nonblank && empty_line)
-                            || (!number_nonblank && squeeze_blank && blank_line_counter > 1);
+
+                        let b_decrement = number_nonblank && empty_line;
+                        let s_decrement = !number_nonblank && squeeze_blank && blank_line_counter > 1;
 
                         line_number += 1;
-                        if decrement_line_number {
+                        if b_decrement || s_decrement {
                             line_number -= 1;
                         }
 
