@@ -52,8 +52,9 @@ fn main() {
         // Handle short and combined arguments
         let first_char = arg.chars().nth(0).unwrap();
         let second_char = arg.chars().nth(1).unwrap();
+        let is_short_arg = first_char == '-' && second_char != '-';
 
-        if first_char == '-' && second_char != '-' {
+        if is_short_arg {
             for short_arg in arg.chars() {
                 match short_arg {
                     'h' => help = true,
@@ -66,24 +67,35 @@ fn main() {
                         show_ends = true;
                         show_tabs = true
                     }
-                    _short_arg => (),
+                    'a'..='z' | 'A'..='Z' => {
+                        println!("ERROR: -{} option doesn't exist\n", short_arg);
+                        print_help();
+                        return;
+                    }
+                    _ => (),
                 }
             }
         }
 
         // Long arguments
-        match arg.as_str() {
-            "--help" => help = true,
-            "--show-ends" => show_ends = true,
-            "--number" => number = true,
-            "--number-nonblank" => number_nonblank = true,
-            "--show-tabs" => show_tabs = true,
-            "--squeeze-blank" => squeeze_blank = true,
-            "--show-all" => {
-                show_ends = true;
-                show_tabs = true
+        if !is_short_arg {
+            match arg.as_str() {
+                "--help" => help = true,
+                "--show-ends" => show_ends = true,
+                "--number" => number = true,
+                "--number-nonblank" => number_nonblank = true,
+                "--show-tabs" => show_tabs = true,
+                "--squeeze-blank" => squeeze_blank = true,
+                "--show-all" => {
+                    show_ends = true;
+                    show_tabs = true
+                }
+                arg => {
+                    println!("ERROR: {} option doesn't exist\n", arg);
+                    print_help();
+                    return;
+                }
             }
-            _arg => (),
         }
     }
 
