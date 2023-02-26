@@ -34,10 +34,10 @@ With no FILE, or when FILE is -, read standard input.
 
 fn main() {
     let args: Vec<String> = env::args().collect();
+    let mut read_standard_input = false;
 
     if args.len() < 2 {
-        print_help();
-        return;
+        read_standard_input = true;
     }
 
     // Arguments
@@ -49,53 +49,60 @@ fn main() {
     let mut squeeze_blank = false;
 
     for arg in &args[1..] {
-        // Handle short and combined arguments
-        let first_char = arg.chars().nth(0).unwrap();
-        let second_char = arg.chars().nth(1).unwrap();
-        let is_short_arg = first_char == '-' && second_char != '-';
-
-        if is_short_arg {
-            for short_arg in arg.chars() {
-                match short_arg {
-                    'h' => help = true,
-                    'E' => show_ends = true,
-                    'n' => number = true,
-                    'b' => number_nonblank = true,
-                    'T' => show_tabs = true,
-                    's' => squeeze_blank = true,
-                    'A' => {
-                        show_ends = true;
-                        show_tabs = true
-                    }
-                    'a'..='z' | 'A'..='Z' => {
-                        println!("ERROR: -{} option doesn't exist\n", short_arg);
-                        print_help();
-                        return;
-                    }
-                    _ => (),
-                }
-            }
+        // ignore files
+        if arg.chars().nth(0).unwrap() != '-' {
+            continue;
         }
 
-        // Long arguments
-        if !is_short_arg {
-            match arg.as_str() {
-                "--help" => help = true,
-                "--show-ends" => show_ends = true,
-                "--number" => number = true,
-                "--number-nonblank" => number_nonblank = true,
-                "--show-tabs" => show_tabs = true,
-                "--squeeze-blank" => squeeze_blank = true,
-                "--show-all" => {
-                    show_ends = true;
-                    show_tabs = true
-                }
-                arg => {
+        // args
+        match arg.as_str() {
+            // read standard input
+            "-" => read_standard_input = true,
+
+            // long
+            "--help" => help = true,
+            "--show-ends" => show_ends = true,
+            "--number" => number = true,
+            "--number-nonblank" => number_nonblank = true,
+            "--show-tabs" => show_tabs = true,
+            "--squeeze-blank" => squeeze_blank = true,
+            "--show-all" => {
+                show_ends = true;
+                show_tabs = true
+            }
+
+            _ => match arg.chars().nth(1).unwrap() {
+                // wrong long
+                '-' => {
                     println!("ERROR: {} option doesn't exist\n", arg);
                     print_help();
                     return;
                 }
-            }
+                _ => {
+                    for c in arg.chars() {
+                        match c {
+                            // short
+                            'h' => help = true,
+                            'E' => show_ends = true,
+                            'n' => number = true,
+                            'b' => number_nonblank = true,
+                            'T' => show_tabs = true,
+                            's' => squeeze_blank = true,
+                            'A' => {
+                                show_ends = true;
+                                show_tabs = true
+                            }
+                            // wrong short
+                            'a'..='z' | 'A'..='Z' => {
+                                println!("ERROR: -{} option doesn't exist\n", c);
+                                print_help();
+                                return;
+                            }
+                            _ => (),
+                        }
+                    }
+                }
+            },
         }
     }
 
