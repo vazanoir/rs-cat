@@ -18,7 +18,7 @@ fn fmt_line_number(number: i32) -> String {
 
 fn print_help() {
     println!(
-        "Usage: cat [OPTION]... [FILE]...
+        "Usage: rs-cat [OPTION]... [FILE]...
 Concatenate FILE(s) to standard output.
 
 With no FILE, or when FILE is -, read standard input.
