@@ -35,10 +35,7 @@ With no FILE, or when FILE is -, read standard input.
 fn main() {
     let args: Vec<String> = env::args().collect();
     let mut read_standard_input = false;
-
-    if args.len() < 2 {
-        read_standard_input = true;
-    }
+    let mut file_counter = 0;
 
     // Arguments
     let mut help = false;
@@ -51,6 +48,7 @@ fn main() {
     for arg in &args[1..] {
         // ignore files
         if arg.chars().nth(0).unwrap() != '-' {
+            file_counter += 1;
             continue;
         }
 
@@ -104,6 +102,10 @@ fn main() {
                 }
             },
         }
+    }
+
+    if file_counter == 0 {
+        read_standard_input = true;
     }
 
     if help {
