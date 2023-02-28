@@ -50,8 +50,8 @@ pub fn set_options(args: &[String]) -> Vec<Option> {
     let mut options = get_options();
 
     for arg in args {
-        // ignore files
-        if arg.chars().nth(0).unwrap() != '-' {
+        // ignore files and the - exception
+        if arg.chars().nth(0).unwrap() != '-' || arg == "-" {
             continue;
         }
 
