@@ -8,6 +8,11 @@ fn get_options() -> Vec<Option> {
     let options: Vec<Option> = vec![
         Option {
             value: false,
+            short: 'A',
+            long: "--show-all".to_string(),
+        },
+        Option {
+            value: false,
             short: 'E',
             long: "--show-ends".to_string(),
         },
@@ -63,6 +68,11 @@ pub fn set_options(args: &[String]) -> Vec<Option> {
                 }
             }
         }
+    }
+
+    if options[0].value == true {
+        options[1].value = true;
+        options[2].value = true;
     }
 
     return options;

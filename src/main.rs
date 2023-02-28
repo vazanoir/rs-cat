@@ -38,7 +38,7 @@ fn main() {
     let args: Vec<String> = env::args().collect();
     let options = options::set_options(&args[1..]);
 
-    if options[5].value {
+    if options[6].value {
         print_help();
         return;
     }
@@ -47,16 +47,16 @@ fn main() {
     let mut line_number: i32 = 0;
     let mut blank_line_counter: i32 = 0;
 
-    for file in &args {
+    for file in &args[1..] {
         if file.chars().nth(0).unwrap() != '-' {
             let file = fs::File::open(file).expect("Please enter a valid file");
             let buf_reader = io::BufReader::new(file);
 
-            let show_ends = options[0].value;
-            let show_tabs = options[1].value;
-            let number = options[2].value;
-            let number_nonblank = options[3].value;
-            let squeeze_blank = options[4].value;
+            let show_ends = options[1].value;
+            let show_tabs = options[2].value;
+            let number = options[3].value;
+            let number_nonblank = options[4].value;
+            let squeeze_blank = options[5].value;
 
             for line in buf_reader.lines() {
                 match line {
