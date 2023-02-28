@@ -3,6 +3,8 @@ use std::fs;
 use std::io;
 use std::io::prelude::BufRead;
 
+mod options;
+
 const LINE_NUMBER_MAX_LENGTH_SIZE: usize = 6;
 
 fn fmt_line_number(number: i32) -> String {
@@ -34,81 +36,9 @@ With no FILE, or when FILE is -, read standard input.
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let mut read_standard_input = false;
-    let mut file_counter = 0;
+    let options = options::set_options(&args[1..], options::get_options());
 
-    // Arguments
-    let mut help = false;
-    let mut show_ends = false;
-    let mut number = false;
-    let mut number_nonblank = false;
-    let mut show_tabs = false;
-    let mut squeeze_blank = false;
-
-    for arg in &args[1..] {
-        // ignore files
-        if arg.chars().nth(0).unwrap() != '-' {
-            file_counter += 1;
-            continue;
-        }
-
-        // args
-        match arg.as_str() {
-            // read standard input
-            "-" => read_standard_input = true,
-
-            // long
-            "--help" => help = true,
-            "--show-ends" => show_ends = true,
-            "--number" => number = true,
-            "--number-nonblank" => number_nonblank = true,
-            "--show-tabs" => show_tabs = true,
-            "--squeeze-blank" => squeeze_blank = true,
-            "--show-all" => {
-                show_ends = true;
-                show_tabs = true
-            }
-
-            _ => match arg.chars().nth(1).unwrap() {
-                // wrong long
-                '-' => {
-                    println!("ERROR: {} option doesn't exist\n", arg);
-                    print_help();
-                    return;
-                }
-                _ => {
-                    for c in arg.chars() {
-                        match c {
-                            // short
-                            'h' => help = true,
-                            'E' => show_ends = true,
-                            'n' => number = true,
-                            'b' => number_nonblank = true,
-                            'T' => show_tabs = true,
-                            's' => squeeze_blank = true,
-                            'A' => {
-                                show_ends = true;
-                                show_tabs = true
-                            }
-                            // wrong short
-                            'a'..='z' | 'A'..='Z' => {
-                                println!("ERROR: -{} option doesn't exist\n", c);
-                                print_help();
-                                return;
-                            }
-                            _ => (),
-                        }
-                    }
-                }
-            },
-        }
-    }
-
-    if file_counter == 0 {
-        read_standard_input = true;
-    }
-
-    if help {
+    if options[5].value {
         print_help();
         return;
     }
@@ -117,10 +47,16 @@ fn main() {
     let mut line_number: i32 = 0;
     let mut blank_line_counter: i32 = 0;
 
-    for arg in &args[1..] {
-        if arg.chars().nth(0).unwrap() != '-' {
-            let file = fs::File::open(arg).expect("Please enter a valid file");
+    for file in &args {
+        if file.chars().nth(0).unwrap() != '-' {
+            let file = fs::File::open(file).expect("Please enter a valid file");
             let buf_reader = io::BufReader::new(file);
+
+            let show_ends = options[0].value;
+            let show_tabs = options[1].value;
+            let number = options[2].value;
+            let number_nonblank = options[3].value;
+            let squeeze_blank = options[4].value;
 
             for line in buf_reader.lines() {
                 match line {
