@@ -4,7 +4,7 @@ pub struct Option {
     pub long: String,
 }
 
-pub fn get_options() -> Vec<Option> {
+fn get_options() -> Vec<Option> {
     let options: Vec<Option> = vec![
         Option {
             value: false,
@@ -41,7 +41,9 @@ pub fn get_options() -> Vec<Option> {
     return options;
 }
 
-pub fn set_options(args: &[String], mut options: Vec<Option>) -> Vec<Option> {
+pub fn set_options(args: &[String]) -> Vec<Option> {
+    let mut options = get_options();
+
     for arg in args {
         // ignore files
         if arg.chars().nth(0).unwrap() != '-' {

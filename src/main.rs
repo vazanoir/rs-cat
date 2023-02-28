@@ -36,7 +36,7 @@ With no FILE, or when FILE is -, read standard input.
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let options = options::set_options(&args[1..], options::get_options());
+    let options = options::set_options(&args[1..]);
 
     if options[5].value {
         print_help();
