@@ -1,7 +1,7 @@
 pub struct Option {
     pub value: bool,
     pub short: char,
-    pub long: String,
+    pub long: &'static str,
 }
 
 fn get_options() -> Vec<Option> {
@@ -9,37 +9,37 @@ fn get_options() -> Vec<Option> {
         Option {
             value: false,
             short: 'A',
-            long: "--show-all".to_string(),
+            long: "--show-all",
         },
         Option {
             value: false,
             short: 'E',
-            long: "--show-ends".to_string(),
+            long: "--show-ends",
         },
         Option {
             value: false,
             short: 'T',
-            long: "--show-tabs".to_string(),
+            long: "--show-tabs",
         },
         Option {
             value: false,
             short: 'n',
-            long: "--number".to_string(),
+            long: "--number",
         },
         Option {
             value: false,
             short: 'b',
-            long: "--number-nonblank".to_string(),
+            long: "--number-nonblank",
         },
         Option {
             value: false,
             short: 's',
-            long: "--squeeze-blank".to_string(),
+            long: "--squeeze-blank",
         },
         Option {
             value: false,
             short: 'h',
-            long: "--help".to_string(),
+            long: "--help",
         },
     ];
 
@@ -56,7 +56,7 @@ pub fn set_options(args: &[String]) -> Vec<Option> {
         }
 
         for mut option in options.iter_mut() {
-            if &option.long == arg {
+            if option.long == arg {
                 option.value = true;
             }
 
