@@ -50,8 +50,10 @@ pub fn set_options(args: &[String]) -> Vec<Option> {
     let mut options = get_options();
 
     for arg in args {
-        // ignore files and the - exception
-        if arg.chars().nth(0).unwrap() != '-' || arg == "-" {
+        let is_file = arg.chars().nth(0).unwrap() != '-';
+        let is_standard_input = arg == "-";
+
+        if is_file || is_standard_input {
             continue;
         }
 
