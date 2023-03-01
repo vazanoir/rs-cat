@@ -26,11 +26,14 @@ fn format_line(
     mut blank_line_counter: usize,
 ) -> (String, usize, usize) {
     let show_all = options[0].value;
-    let show_ends = options[1].value;
-    let show_tabs = options[2].value;
-    let number = options[3].value;
-    let number_nonblank = options[4].value;
-    let squeeze_blank = options[5].value;
+    let e = options[1].value;
+    let t = options[2].value;
+    let show_nonprinting = options[3].value;
+    let show_ends = options[4].value;
+    let show_tabs = options[5].value;
+    let number = options[6].value;
+    let number_nonblank = options[7].value;
+    let squeeze_blank = options[8].value;
 
     let empty_line = line.trim_end_matches("\n").len() == 0;
 
@@ -48,8 +51,11 @@ fn format_line(
         blank_line_counter = 0;
     }
 
-    if show_tabs || show_all {
+    if show_tabs || show_all || t {
         line = line.replace("\t", "^I");
+    }
+
+    if show_nonprinting || e || t {
     }
 
     if number || number_nonblank {
@@ -60,7 +66,7 @@ fn format_line(
         }
     }
 
-    if show_ends || show_all {
+    if show_ends || show_all || e {
         line = line + "$";
     }
 
@@ -84,7 +90,7 @@ fn main() {
         }
     };
 
-    if options[6].value {
+    if options[9].value {
         options::print_help();
         return;
     }

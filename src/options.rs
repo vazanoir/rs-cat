@@ -11,7 +11,25 @@ fn get_options() -> Vec<Option> {
             value: false,
             short: 'A',
             long: "--show-all",
-            help: "equivalent to -ET",
+            help: "equivalent to -vET",
+        },
+        Option {
+            value: false,
+            short: 'e',
+            long: "",
+            help: "equivalent to -vE",
+        },
+        Option {
+            value: false,
+            short: 't',
+            long: "",
+            help: "equivalent to -vT",
+        },
+        Option {
+            value: false,
+            short: 'v',
+            long: "--show-nonprinting",
+            help: "use ^ and M- notation, except for LFD and TAB",
         },
         Option {
             value: false,
@@ -121,7 +139,6 @@ With no FILE, or when FILE is -, read standard input.\n\n"
 }
 
 fn format_help_line(option: Option) -> String {
-    const TWO_INDENT_SIZE: usize = 16;
     let mut line = String::from("");
 
     line.push_str("  -");
@@ -129,9 +146,11 @@ fn format_help_line(option: Option) -> String {
     line.push_str(", ");
     line.push_str(option.long);
 
-    line.push_str("\t\t");
-    if line.len() <= TWO_INDENT_SIZE + 1 {
-        line.push_str("\t");
+    line.push_str("\t");
+    for tab_multiple in [8, 16, 24] {
+        if line.len() <= tab_multiple {
+            line.push_str("\t");
+        }
     }
 
     line.push_str(option.help);
