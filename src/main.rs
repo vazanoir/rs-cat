@@ -189,7 +189,7 @@ fn main() {
             let file = match file {
                 Ok(ok) => ok,
                 Err(err) => {
-                    println!("ERROR: {}: {}\n", err, arg);
+                    println!("{}: {}: {}\n", args[0].to_owned(), arg, err);
                     options::print_help();
                     return;
                 }
