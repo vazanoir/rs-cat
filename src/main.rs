@@ -127,7 +127,16 @@ fn main() {
             let is_file = arg.chars().nth(0).unwrap() != '-';
 
             if is_file {
-                let file = fs::File::open(arg).expect("Please enter a valid file");
+                let file = fs::File::open(arg);
+                let file = match file {
+                    Ok(ok) => ok,
+                    Err(err) => {
+                        println!("ERROR: {}: {}\n", err, arg);
+                        options::print_help();
+                        return;
+                    }
+                };
+
                 let buf_reader = io::BufReader::new(file);
 
                 for line in buf_reader.lines() {
