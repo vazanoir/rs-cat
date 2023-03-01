@@ -60,18 +60,18 @@ fn format_line(
     }
 
     if show_nonprinting || e || t {
-        let control_chars = 0..=31;
+        let control_chars_codes = 0..=31;
         const TAB: u32 = 9;
         const LFD: u32 = 10;
 
-        for c in control_chars {
-            if let TAB | LFD = c {
+        for dec_code in control_chars_codes {
+            if let TAB | LFD = dec_code {
                 continue;
             }
 
-            let before = char_from_u32_to_string(c);
+            let before = char_from_u32_to_string(dec_code);
             let mut after = String::from("^");
-            after.push_str(&char_from_u32_to_string(c + 64));
+            after.push_str(&char_from_u32_to_string(dec_code + 64));
 
             line = line.replace(&before, &after);
         }
