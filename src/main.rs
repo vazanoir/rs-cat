@@ -187,11 +187,6 @@ fn main() {
             }
         }
 
-        let output = match output.strip_suffix("\n") {
-            Some(output) => output,
-            None => &output,
-        };
-
-        println!("{output}");
+        print!("{output}");
     }
 }
