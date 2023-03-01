@@ -209,11 +209,11 @@ fn main() {
                     Err(e) => (e.to_string(), 0, 0),
                 };
 
-                let line = result.0;
+                let new_output = result.0;
                 line_number = result.1;
                 blank_line_counter = result.2;
 
-                output = line;
+                output = new_output;
             }
         }
 
