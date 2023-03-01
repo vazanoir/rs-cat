@@ -62,7 +62,7 @@ fn main() {
             };
 
             let line = result.0;
-            println!("{line}");
+            print!("{line}");
             line_number = result.1;
             blank_line_counter = result.2;
         }
