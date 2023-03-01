@@ -119,7 +119,7 @@ fn format_line(
     let number_nonblank = options[4].value;
     let squeeze_blank = options[5].value;
 
-    let empty_line = line.len() == 0;
+    let empty_line = line.trim_end_matches("\n").len() == 0;
 
     let b_decrement = number_nonblank && empty_line;
     let s_decrement = !number_nonblank && squeeze_blank && blank_line_counter > 1;
