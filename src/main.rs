@@ -60,10 +60,11 @@ fn format_line(
     }
 
     if show_nonprinting || e || t {
+        let control_chars = 0..=31;
         const TAB: u32 = 9;
         const LFD: u32 = 10;
 
-        for c in 0..=31 {
+        for c in control_chars {
             if let TAB | LFD = c {
                 continue;
             }
