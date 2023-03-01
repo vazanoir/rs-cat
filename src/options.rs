@@ -54,7 +54,7 @@ fn get_options() -> Vec<Option> {
     return options;
 }
 
-pub fn set_options(args: &[String]) -> Vec<Option> {
+pub fn set_options(args: &[String]) -> Result<Vec<Option>, String> {
     let mut options = get_options();
 
     for arg in args {
@@ -77,8 +77,8 @@ pub fn set_options(args: &[String]) -> Vec<Option> {
                 }
             }
 
-            if is_long && long_not_matching {
-                panic!("{} doesn't exist", arg);
+            if long_not_matching {
+                return Err(arg.clone().to_string() + " doesn't exist");
             }
         }
 
@@ -94,13 +94,13 @@ pub fn set_options(args: &[String]) -> Vec<Option> {
                 }
 
                 if short_not_matching && c != '-' {
-                    panic!("-{} doesn't exist", c);
+                    return Err("-".to_string() + c.clone().to_string().as_str() + " doesn't exist");
                 }
             }
         }
     }
 
-    return options;
+    return Ok(options);
 }
 
 pub fn print_help() {

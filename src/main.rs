@@ -23,6 +23,15 @@ fn main() {
     let args: Vec<String> = env::args().collect();
     let options = options::set_options(&args[1..]);
 
+    let options = match options {
+        Ok(ok) => ok,
+        Err(err) => {
+            println!("ERROR: {}\n", err);
+            options::print_help();
+            return;
+        }
+    };
+
     if options[6].value {
         options::print_help();
         return;
