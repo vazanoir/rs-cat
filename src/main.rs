@@ -18,6 +18,10 @@ fn fmt_line_number(number: usize) -> String {
     return formated_line_number;
 }
 
+fn char_from_u32_to_string(i: u32) -> String {
+    return char::from_u32(i).unwrap().to_string();
+}
+
 fn format_line(
     options: &Vec<options::Option>,
     mut line: String,
@@ -56,6 +60,25 @@ fn format_line(
     }
 
     if show_nonprinting || e || t {
+        const TAB: u32 = 9;
+        const LFD: u32 = 10;
+
+        for c in 0..=31 {
+            if let TAB | LFD = c {
+                continue;
+            }
+
+            let before = char_from_u32_to_string(c);
+            let mut after = String::from("^");
+            after.push_str(&char_from_u32_to_string(c + 64));
+
+            line = line.replace(&before, &after);
+        }
+
+        // DEL is an exception
+        let before = char_from_u32_to_string(127);
+        let after = char_from_u32_to_string(63);
+        line = line.replace(&before, &after);
     }
 
     if number || number_nonblank {
