@@ -117,7 +117,7 @@ With no FILE, or when FILE is -, read standard input.\n\n"
         help.push_str("\n");
     }
 
-    println!("{}", help);
+    print!("{}", help);
 }
 
 fn format_help_line(option: Option) -> String {
