@@ -65,24 +65,39 @@ pub fn set_options(args: &[String]) -> Vec<Option> {
             continue;
         }
 
-        for mut option in options.iter_mut() {
-            if option.long == arg {
-                option.value = true;
+        let is_long = arg.chars().nth(1).unwrap() == '-';
+
+        if is_long {
+            let mut long_not_matching = true;
+
+            for option in options.iter_mut() {
+                if option.long == arg {
+                    option.value = true;
+                    long_not_matching = false;
+                }
             }
 
-            if arg.chars().nth(1).unwrap() != '-' {
-                for c in arg.chars() {
+            if is_long && long_not_matching {
+                panic!("{} doesn't exist", arg);
+            }
+        }
+
+        if !is_long {
+            for c in arg.chars() {
+                let mut short_not_matching = true;
+
+                for option in options.iter_mut() {
                     if option.short == c {
                         option.value = true;
+                        short_not_matching = false;
                     }
+                }
+
+                if short_not_matching && c != '-' {
+                    panic!("-{} doesn't exist", c);
                 }
             }
         }
-    }
-
-    if options[0].value == true {
-        options[1].value = true;
-        options[2].value = true;
     }
 
     return options;

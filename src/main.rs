@@ -37,6 +37,7 @@ fn main() {
             let file = fs::File::open(file).expect("Please enter a valid file");
             let buf_reader = io::BufReader::new(file);
 
+            let show_all = options[0].value;
             let show_ends = options[1].value;
             let show_tabs = options[2].value;
             let number = options[3].value;
@@ -63,7 +64,7 @@ fn main() {
                             blank_line_counter = 0;
                         }
 
-                        if show_tabs {
+                        if show_tabs || show_all {
                             line = line.replace("\t", "^I");
                         }
 
@@ -75,7 +76,7 @@ fn main() {
                             }
                         }
 
-                        if show_ends {
+                        if show_ends || show_all {
                             line = line + "$";
                         }
 
