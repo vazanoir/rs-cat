@@ -20,8 +20,8 @@ fn fmt_line_number(number: i32) -> String {
 
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
-    let options = options::set_options(&args[1..]);
+    let args: Vec<String> = env::args().skip(1).collect();
+    let options = options::set_options(&args);
 
     let options = match options {
         Ok(ok) => ok,
@@ -41,7 +41,7 @@ fn main() {
     let mut line_number: i32 = 0;
     let mut blank_line_counter: i32 = 0;
 
-    for file in &args[1..] {
+    for file in &args {
         if file.chars().nth(0).unwrap() != '-' {
             let file = fs::File::open(file).expect("Please enter a valid file");
             let buf_reader = io::BufReader::new(file);
