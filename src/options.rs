@@ -1,8 +1,8 @@
 pub struct Option {
     pub value: bool,
-    pub short: char,
-    pub long: &'static str,
-    pub help: &'static str,
+    short: char,
+    long: &'static str,
+    help: &'static str,
 }
 
 fn get_options() -> Vec<Option> {
