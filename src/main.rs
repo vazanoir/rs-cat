@@ -94,6 +94,15 @@ fn main() {
         .filter(|arg| arg.as_str() == "-")
         .for_each(|_| standard_input = true);
 
+    let file_count = args
+        .iter()
+        .filter(|arg| arg.chars().nth(0).unwrap() != '-')
+        .count();
+
+    if file_count <= 0 {
+        standard_input = true;
+    }
+
     let mut output = String::from("");
     let mut line_number: usize = 0;
     let mut blank_line_counter: usize = 0;
