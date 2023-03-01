@@ -115,7 +115,7 @@ fn format_help_line(option: Option) -> String {
     line.push_str(option.long);
 
     line.push_str("\t\t");
-    if line.len() <= TWO_INDENT_SIZE {
+    if line.len() <= TWO_INDENT_SIZE + 1 {
         line.push_str("\t");
     }
 
