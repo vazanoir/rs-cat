@@ -72,8 +72,8 @@ fn format_line(
 }
 
 fn main() {
-    let args: Vec<String> = env::args().skip(1).collect();
-    let options = options::set_options(&args);
+    let args: Vec<String> = env::args().collect();
+    let options = options::set_options(&args[1..]);
 
     let options = match options {
         Ok(ok) => ok,
@@ -90,11 +90,13 @@ fn main() {
     }
 
     let mut standard_input = false;
-    args.iter()
+
+    args[1..]
+        .iter()
         .filter(|arg| arg.as_str() == "-")
         .for_each(|_| standard_input = true);
 
-    let file_count = args
+    let file_count = args[1..]
         .iter()
         .filter(|arg| arg.chars().nth(0).unwrap() != '-')
         .count();
@@ -132,40 +134,56 @@ fn main() {
     }
 
     if !standard_input {
-        for arg in &args {
-            let is_file = arg.chars().nth(0).unwrap() != '-';
+        for arg in &args[1..] {
+            let is_arg = arg.chars().nth(0).unwrap() == '-';
 
-            if is_file {
-                let file = fs::File::open(arg);
-                let file = match file {
-                    Ok(ok) => ok,
-                    Err(err) => {
-                        println!("ERROR: {}: {}\n", err, arg);
-                        options::print_help();
-                        return;
-                    }
+            if is_arg {
+                continue;
+            }
+
+            let metadata = fs::metadata(arg);
+            let metadata = match metadata {
+                Ok(ok) => ok,
+                Err(_) => {
+                    output += &(args[0].to_owned() + ": " + arg + ": No such file or directory\n");
+                    continue;
+                }
+            };
+
+            if metadata.is_dir() {
+                output += &(args[0].to_owned() + ": " + arg + ": Is a folder\n");
+                continue;
+            }
+
+            let file = fs::File::open(arg);
+            let file = match file {
+                Ok(ok) => ok,
+                Err(err) => {
+                    println!("ERROR: {}: {}\n", err, arg);
+                    options::print_help();
+                    return;
+                }
+            };
+
+            let buf_reader = io::BufReader::new(file);
+
+            for line in buf_reader.lines() {
+                let result = match line {
+                    Ok(line) => format_line(
+                        &options,
+                        line,
+                        output.clone(),
+                        line_number,
+                        blank_line_counter,
+                    ),
+                    Err(e) => (e.to_string(), 0, 0),
                 };
 
-                let buf_reader = io::BufReader::new(file);
+                let line = result.0;
+                line_number = result.1;
+                blank_line_counter = result.2;
 
-                for line in buf_reader.lines() {
-                    let result = match line {
-                        Ok(line) => format_line(
-                            &options,
-                            line,
-                            output.clone(),
-                            line_number,
-                            blank_line_counter,
-                        ),
-                        Err(e) => (e.to_string(), 0, 0),
-                    };
-
-                    let line = result.0;
-                    line_number = result.1;
-                    blank_line_counter = result.2;
-
-                    output = line;
-                }
+                output = line;
             }
         }
 
