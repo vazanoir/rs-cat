@@ -18,6 +18,59 @@ fn fmt_line_number(number: usize) -> String {
     return formated_line_number;
 }
 
+fn format_line(
+    options: &Vec<options::Option>,
+    mut line: String,
+    mut output: String,
+    mut line_number: usize,
+    mut blank_line_counter: usize,
+) -> (String, usize, usize) {
+    let show_all = options[0].value;
+    let show_ends = options[1].value;
+    let show_tabs = options[2].value;
+    let number = options[3].value;
+    let number_nonblank = options[4].value;
+    let squeeze_blank = options[5].value;
+
+    let empty_line = line.trim_end_matches("\n").len() == 0;
+
+    let b_decrement = number_nonblank && empty_line;
+    let s_decrement = !number_nonblank && squeeze_blank && blank_line_counter > 1;
+
+    line_number += 1;
+    if b_decrement || s_decrement {
+        line_number -= 1;
+    }
+
+    if empty_line {
+        blank_line_counter += 1;
+    } else {
+        blank_line_counter = 0;
+    }
+
+    if show_tabs || show_all {
+        line = line.replace("\t", "^I");
+    }
+
+    if number || number_nonblank {
+        if number_nonblank && empty_line {
+            line = "".to_string();
+        } else {
+            line = fmt_line_number(line_number) + "\t" + &line;
+        }
+    }
+
+    if show_ends || show_all {
+        line = line + "$";
+    }
+
+    if !squeeze_blank || (squeeze_blank && blank_line_counter <= 1) {
+        output += &(line + "\n");
+    }
+
+    return (output, line_number, blank_line_counter);
+}
+
 fn main() {
     let args: Vec<String> = env::args().skip(1).collect();
     let options = options::set_options(&args);
@@ -103,57 +156,4 @@ fn main() {
 
         println!("{output}");
     }
-}
-
-fn format_line(
-    options: &Vec<options::Option>,
-    mut line: String,
-    mut output: String,
-    mut line_number: usize,
-    mut blank_line_counter: usize,
-) -> (String, usize, usize) {
-    let show_all = options[0].value;
-    let show_ends = options[1].value;
-    let show_tabs = options[2].value;
-    let number = options[3].value;
-    let number_nonblank = options[4].value;
-    let squeeze_blank = options[5].value;
-
-    let empty_line = line.trim_end_matches("\n").len() == 0;
-
-    let b_decrement = number_nonblank && empty_line;
-    let s_decrement = !number_nonblank && squeeze_blank && blank_line_counter > 1;
-
-    line_number += 1;
-    if b_decrement || s_decrement {
-        line_number -= 1;
-    }
-
-    if empty_line {
-        blank_line_counter += 1;
-    } else {
-        blank_line_counter = 0;
-    }
-
-    if show_tabs || show_all {
-        line = line.replace("\t", "^I");
-    }
-
-    if number || number_nonblank {
-        if number_nonblank && empty_line {
-            line = "".to_string();
-        } else {
-            line = fmt_line_number(line_number) + "\t" + &line;
-        }
-    }
-
-    if show_ends || show_all {
-        line = line + "$";
-    }
-
-    if !squeeze_blank || (squeeze_blank && blank_line_counter <= 1) {
-        output += &(line + "\n");
-    }
-
-    return (output, line_number, blank_line_counter);
 }
