@@ -18,28 +18,13 @@ fn fmt_line_number(number: i32) -> String {
     return formated_line_number;
 }
 
-fn print_help() {
-    println!(
-        "Usage: rs-cat [OPTION]... [FILE]...
-Concatenate FILE(s) to standard output.
-
-With no FILE, or when FILE is -, read standard input.
-  -A, --show-all            equivalent to -ET
-  -E, --show-ends           display $ at end of each line
-  -T, --show-tabs           display TAB characters as ^I
-  -n, --number              number all output lines
-  -b, --number-nonblank     number nonempty output lines, overrides -n
-  -s, --squeeze-blank       suppress repeated empty output lines
-  -h, --help                display this help and exit"
-    );
-}
 
 fn main() {
     let args: Vec<String> = env::args().collect();
     let options = options::set_options(&args[1..]);
 
     if options[6].value {
-        print_help();
+        options::print_help();
         return;
     }
 
