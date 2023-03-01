@@ -124,7 +124,9 @@ fn main() {
 
     if !standard_input {
         for arg in &args {
-            if arg.chars().nth(0).unwrap() != '-' {
+            let is_file = arg.chars().nth(0).unwrap() != '-';
+
+            if is_file {
                 let file = fs::File::open(arg).expect("Please enter a valid file");
                 let buf_reader = io::BufReader::new(file);
 
