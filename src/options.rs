@@ -93,7 +93,7 @@ pub fn print_help() {
     let mut help = "Usage: rs-cat [OPTION]... [FILE]...
 Concatenate FILE(s) to standard output.
 
-With no FILE, or when FILE is -, read standard input.\n"
+With no FILE, or when FILE is -, read standard input.\n\n"
         .to_string();
 
     for option in options {
