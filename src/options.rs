@@ -78,7 +78,7 @@ pub fn set_options(args: &[String]) -> Result<Vec<Option>, String> {
             }
 
             if long_not_matching {
-                return Err(arg.clone().to_string() + " doesn't exist");
+                return Err(arg.to_string() + " doesn't exist");
             }
         }
 
@@ -94,7 +94,7 @@ pub fn set_options(args: &[String]) -> Result<Vec<Option>, String> {
                 }
 
                 if short_not_matching && c != '-' {
-                    return Err("-".to_string() + c.clone().to_string().as_str() + " doesn't exist");
+                    return Err("-".to_string() + c.to_string().as_str() + " doesn't exist");
                 }
             }
         }
