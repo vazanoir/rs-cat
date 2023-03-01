@@ -61,10 +61,11 @@ fn main() {
                 Err(err) => panic!("{}", err),
             };
 
-            let line = result.0;
-            print!("{line}");
+            let line = result.0.trim_end_matches("\n").to_string();
             line_number = result.1;
             blank_line_counter = result.2;
+
+            println!("{line}");
         }
     }
 
