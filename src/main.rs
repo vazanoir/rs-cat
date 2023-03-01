@@ -59,7 +59,7 @@ fn format_line(
         line = line.replace("\t", "^I");
     }
 
-    if show_nonprinting || e || t {
+    if show_nonprinting || show_all || e || t {
         let control_chars_codes = 0..=31;
         const TAB: u32 = 9;
         const LFD: u32 = 10;
