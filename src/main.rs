@@ -150,7 +150,7 @@ fn main() {
             let result = match result {
                 Ok(_) => format_line(
                     &options,
-                    buffer,
+                    buffer.trim_end().to_string(),
                     output.clone(),
                     line_number,
                     blank_line_counter,
@@ -158,11 +158,11 @@ fn main() {
                 Err(err) => panic!("{}", err),
             };
 
-            let line = result.0.trim_end_matches("\n").to_string();
+            let line = result.0.to_string();
             line_number = result.1;
             blank_line_counter = result.2;
 
-            println!("{line}");
+            print!("{line}");
         }
     }
 
