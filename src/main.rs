@@ -120,16 +120,19 @@ fn main() {
     }
 
     let mut standard_input = false;
+    let mut file_count = 0;
 
-    args[1..]
-        .iter()
-        .filter(|arg| arg.as_str() == "-")
-        .for_each(|_| standard_input = true);
+    for arg in args[1..].iter() {
+        let is_standard_input = arg.as_str() == "-";
+        if is_standard_input {
+            standard_input = true;
+        }
 
-    let file_count = args[1..]
-        .iter()
-        .filter(|arg| arg.chars().nth(0).unwrap() != '-')
-        .count();
+        let is_arg = arg.chars().nth(0).unwrap() == '-';
+        if !is_arg {
+            file_count += 1;
+        }
+    }
 
     if file_count <= 0 {
         standard_input = true;
