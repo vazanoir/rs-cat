@@ -22,6 +22,25 @@ fn char_from_u32_to_string(i: u32) -> String {
     return char::from_u32(i).unwrap().to_string();
 }
 
+fn replace_nonprinting(
+    mut line: String,
+    before_code: u32,
+    shift: u32,
+    shift_up: bool,
+    after_notation: &str,
+) -> String {
+    let before = char_from_u32_to_string(before_code);
+    let mut after = String::from(after_notation);
+
+    match shift_up {
+        true => after.push_str(&char_from_u32_to_string(before_code + shift)),
+        false => after.push_str(&char_from_u32_to_string(before_code - shift)),
+    }
+
+    line = line.replace(&before, &after);
+    return line;
+}
+
 fn format_line(
     options: &Vec<options::Option>,
     mut line: String,
@@ -60,7 +79,7 @@ fn format_line(
     }
 
     if show_nonprinting || show_all || e || t {
-        let control_chars_codes = 0..=31;
+        let control_chars_codes = 0..32;
         const TAB: u32 = 9;
         const LFD: u32 = 10;
 
@@ -69,17 +88,24 @@ fn format_line(
                 continue;
             }
 
-            let before = char_from_u32_to_string(dec_code);
-            let mut after = String::from("^");
-            after.push_str(&char_from_u32_to_string(dec_code + 64));
-
-            line = line.replace(&before, &after);
+            line = replace_nonprinting(line, dec_code, 64, true, "^");
         }
 
         // DEL is an exception
-        let before = char_from_u32_to_string(127);
-        let after = char_from_u32_to_string(63);
-        line = line.replace(&before, &after);
+        line = replace_nonprinting(line, 127, 64, false, "^");
+
+        let first_extended_ascii_codes = 128..160;
+        for dec_code in first_extended_ascii_codes {
+            line = replace_nonprinting(line, dec_code, 64, false, "M-^")
+        }
+
+        let second_extended_ascii_codes = 160..255;
+        for dec_code in second_extended_ascii_codes {
+            line = replace_nonprinting(line, dec_code, 128, false, "M-")
+        }
+
+        // Another exception
+        line = replace_nonprinting(line, 255, 192, false, "M-^")
     }
 
     if number || number_nonblank {
