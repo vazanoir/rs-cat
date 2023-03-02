@@ -79,10 +79,10 @@ fn format_line(
     }
 
     if show_nonprinting || show_all || e || t {
-        let control_chars_codes = 0..32;
         const TAB: u32 = 9;
         const LFD: u32 = 10;
 
+        let control_chars_codes = 0..32;
         for dec_code in control_chars_codes {
             if let TAB | LFD = dec_code {
                 continue;
